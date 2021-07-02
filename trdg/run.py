@@ -382,7 +382,7 @@ def main():
     if args.use_wikipedia:
         strings = create_strings_from_wikipedia(args.length, args.count, args.language)
     elif args.input_file != "":
-        strings = create_strings_from_file(args.input_file, args.count)
+        strings = create_strings_from_file(args.input_file)
     elif args.random_sequences:
         strings = create_strings_randomly(
             args.length,
@@ -404,6 +404,7 @@ def main():
         strings = create_strings_from_dict(
             args.length, args.random, args.count, lang_dict
         )
+    
 
     if args.language == "ar":
         from arabic_reshaper import ArabicReshaper
@@ -418,7 +419,10 @@ def main():
     if args.case == "lower":
         strings = [x.lower() for x in strings]
 
+    rnd.shuffle(strings)
+    strings = strings[:args.count]
     string_count = len(strings)
+
 
     p = Pool(args.thread_count)
     for _ in tqdm(
