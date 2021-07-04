@@ -332,6 +332,15 @@ def parse_arguments():
         help="Define the image mode to be used. RGB is default, L means 8-bit grayscale images, 1 means 1-bit binary images stored with one pixel per byte, etc.",
         default="RGB",
     )
+    parser.add_argument(
+        "-idx",
+        "--index",
+        type=str,
+        nargs="?",
+        help="Serial index begin",
+        default="0",
+    )
+
     return parser.parse_args()
 
 
@@ -429,7 +438,7 @@ def main():
         p.imap_unordered(
             FakeTextDataGenerator.generate_from_tuple,
             zip(
-                [i for i in range(0, string_count)],
+                [i + int(args.index) for i in range(0, string_count)],
                 strings,
                 [fonts[rnd.randrange(0, len(fonts))] for _ in range(0, string_count)],
                 [args.output_dir] * string_count,
